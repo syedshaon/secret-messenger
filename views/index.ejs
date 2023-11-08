@@ -11,6 +11,11 @@
             <p class="card-header-title">
               <%= message.title %>
             </p>
+             <form class="is-flex is-align-content-center" action="/messages/delete" method="post">
+              <input class=" is-hidden " type="text" name="mid" id="mid" value=<%=  message.id %>>
+              
+              <button type="submit" class=" button has-background-danger px-6 mt-6 mx-auto is-fullwidth is-primary" <%= message.extraClass  %> >Delete</button>
+            </form>
           </div>
 
           <div class="card-content">

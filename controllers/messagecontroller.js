@@ -7,6 +7,21 @@ const messageController = {
   message_create_get: async (req, res) => {
     res.render("new_message", { title: "Create a new message" });
   },
+  message_delete_post: async (req, res) => {
+    try {
+      // const { mid } = req.body;
+
+      // Save the message to the database
+      // await Message.deleteOne(_id : mid);
+      await Message.findByIdAndRemove(req.body.mid);
+
+      // Send a success response
+      // res.render("index", { title: "Message created successfully!" });
+      res.redirect("/");
+    } catch (err) {
+      next(err);
+    }
+  },
   message_create_post: async (req, res, next) => {
     try {
       const { title, text } = req.body;
@@ -42,6 +57,8 @@ const messageController = {
       const formattedMessages = messages.map((message) => {
         if (req.isAuthenticated()) {
           return {
+            extraClass: req.user.isadmin === "true" ? "" : "disabled",
+            id: message._id,
             title: message.title,
             text: message.text,
             postedBy: message.user.firstName, // Assuming the user model has a username property
@@ -57,6 +74,8 @@ const messageController = {
           };
         } else {
           return {
+            extraClass: "disabled",
+            id: message._id,
             title: message.title,
             text: message.text,
             postedBy: "Visible while logged in", // Assuming the user model has a username property

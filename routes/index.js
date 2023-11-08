@@ -38,6 +38,8 @@ router.get("/messages/create", isLoggedIn, messageController.message_create_get)
 
 router.post("/messages/create", messageController.message_create_post);
 
+router.post("/messages/delete", messageController.message_delete_post);
+
 router.get("/signin", function (req, res, next) {
   res.render("signin", { title: "Sign In to Secret Messenger" });
 });
