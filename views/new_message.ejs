@@ -1,0 +1,39 @@
+<%- include('header') %>
+
+<% if(user.membershipStatus === "premium"){ %>
+ <div class="container mt-6 pt-6">
+  <form action="/messages/create" method="post"> 
+    <h1 class="title has-text-centered  is-block"><%= title %></h1>
+
+    <div class="field">
+      <label class="label" for="title">Title</label>
+      <input class="input" type="text" name="title" id="title" required>
+    </div>
+
+    <div class="field">
+      <label class="label" for="text">Text</label>
+      <textarea class="textarea" name="text" id="text" required></textarea>
+    </div>
+    <button type="submit" class="button px-6 mt-6 mx-auto is-fullwidth is-primary">Create Message</button>
+  </form>
+</div>
+  <% }else{ %>
+    <div class="container mt-6 pt-6">
+    <h1 class="title has-text-centered mb-6 pb-6 is-block">You need to join the Premium Members zone to be able to create new messages. Fill the form below to join.</h1>
+
+    <form action="/joingroup" method="post"> 
+     
+    <div class="field">
+      <label class="label" for="planet">Write the name of the planet where we live in. (in lowercase)</label>
+      <input class="input" type="text" name="planet" id="planet" required>
+    </div>
+    
+    <button type="submit" class="button px-6 mt-6 mx-auto is-fullwidth is-primary">Join Premium Group</button>
+  </form>
+    </div>
+    <% } %>
+ 
+
+
+
+<%- include('footer') %>

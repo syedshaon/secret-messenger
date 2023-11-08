@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  </head>
+  <body>
+  <section class="section p-0">
+            <nav class="px-5 py-3 navbar is-warning" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="/">
+                <h1 class="title algolia-lvl0"> Secret Messenger</h1>
+           
+            </a>
+
+            
+        </div>
+
+        <div id="navbarBasicExample" class="navbar-menu">
+             
+
+            <div class="navbar-end">
+            <div class="navbar-item">
+                <div class="buttons">
+                    <%  if (user) {%>
+                        <b class="mr-6">Hello <%= user.firstName %>!</b>
+                        <a href="/messages/create" class="button is-primary">
+                    <strong>Create New Message</strong>
+                </a>
+                        <a href="/log-out" class="button is-danger">
+                    Sign Out
+                </a>
+                        <% } else { %>
+                            
+                <a href="/signup" class="button is-primary">
+                    <strong>Sign up</strong>
+                </a>
+                <a href="/signin" class="button is-light">
+                    Sign in
+                </a>
+                <%}%>
+                </div>
+            </div>
+            </div>
+        </div>
+        </nav>
+    <div class="container">

@@ -1,0 +1,38 @@
+<%- include('header') %>
+    
+    <div class="container my-6 py-6">
+  <h1 class="title has-text-centered  is-block"> <%= title %></h1>
+
+  <% if (messages.length > 0) { %>
+    <ul class="message-list is-list is-rounded">
+      <% for (const message of messages) { %>
+        <li class="message is-block is-card">
+          <div class="card-header">
+            <p class="card-header-title">
+              <%= message.title %>
+            </p>
+          </div>
+
+          <div class="card-content">
+            <div class="content">
+              <p class="is-size-5"><%= message.text %></p>
+            </div>
+          </div>
+
+          <footer class="card-footer box has-border-top is-primary is-2px py-0">
+            <p class="card-footer-item">Posted by: <%= message.postedBy %></p>
+            <p class="card-footer-item">Posting time: <%= message.postingTime %></p>
+          </footer>
+        </li>
+      <% } %>
+    </ul>
+  <% } else { %>
+    <p class="has-text-centered">No messages found.</p>
+  <% } %>
+</div>
+ 
+
+  
+
+
+<%- include('footer') %>

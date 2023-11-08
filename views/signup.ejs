@@ -1,0 +1,35 @@
+<%- include('header') %>
+ 
+<div class="container  mt-5 pt-5">
+  <form action="/signup" method="post">
+    <h1 class="title has-text-centered  is-block"><%= title %></h1>
+
+    <div class="field">
+      <label class="label" for="firstName">First Name</label>
+      <input class="input" type="text" name="firstName" id="firstName">
+    </div>
+
+    <div class="field">
+      <label class="label" for="lastName">Last Name</label>
+      <input class="input" type="text" name="lastName" id="lastName">
+    </div>
+
+    <div class="field">
+      <label class="label" for="email">Email</label>
+      <input class="input" type="email" name="email" id="email">
+    </div>
+
+    <div class="field">
+      <label class="label" for="password">Password</label>
+      <input class="input" type="password" name="password" id="password">
+    </div>
+    <div class="field">
+      <label class="label" for="rpassword">Repeat Password</label>
+      <input class="input" type="rpassword" name="rpassword" id="rpassword">
+    </div>
+
+  
+    <button type="submit" class="button px-6 mt-6 mx-auto is-fullwidth is-primary">Sign Up</button>
+  </form>
+</div>
+<%- include('footer') %>
