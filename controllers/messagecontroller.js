@@ -7,13 +7,20 @@ const messageController = {
   message_create_get: async (req, res) => {
     res.render("new_message", { title: "Create a new message" });
   },
-  message_delete_post: async (req, res) => {
+  message_delete_post: async (req, res, next) => {
     try {
-      // const { mid } = req.body;
+      // Check if the user is authenticated
+      if (!req.isAuthenticated()) {
+        return res.status(401).send({ message: "Unauthorized" });
+      }
 
       // Save the message to the database
       // await Message.deleteOne(_id : mid);
-      await Message.findByIdAndRemove(req.body.mid);
+      if (req.user.isadmin === "true") {
+        await Message.findByIdAndRemove(req.body.mid);
+      } else {
+        return res.status(401).send({ message: "Unauthorized" });
+      }
 
       // Send a success response
       // res.render("index", { title: "Message created successfully!" });

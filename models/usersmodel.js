@@ -29,11 +29,13 @@ const userSchema = new Schema({
   membershipStatus: {
     type: String,
     enum: ["trial", "premium"],
+    default: "trial",
     required: false,
   },
   isadmin: {
     type: String,
     enum: ["true", "false"],
+    default: "false",
     required: false,
   },
 });
