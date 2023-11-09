@@ -1,9 +1,12 @@
+require("dotenv").config();
+
 const mongoose = require("mongoose");
 const { faker } = require("@faker-js/faker");
 const Message = require("./models/messagemodel");
 const User = require("./models/usersmodel");
 
-mongoose.connect("mongodb+srv://syedshaon99:PzdX1XwhEmiJHskf@messenger.zk0vnpz.mongodb.net/?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true });
+const mongoDB = process.env.mongoCon;
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
