@@ -1,6 +1,10 @@
 <%- include('header') %>
  
-<div class="container  mt-5 pt-5">
+<div class="container mt-6 pt-6">
+  <% if(user){ %>
+     
+    <h1 class="title has-text-centered  is-block">You are already logged In.</h1>
+    <% } else {%>
   <form action="/signup" method="post">
     <h1 class="title has-text-centered  is-block"><%= title %></h1>
 
@@ -31,5 +35,6 @@
   
     <button type="submit" class="button px-6 mt-6 mx-auto is-fullwidth is-primary">Sign Up</button>
   </form>
+ <% } %>
 </div>
 <%- include('footer') %>

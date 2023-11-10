@@ -96,6 +96,12 @@ app.use(async (req, res, next) => {
 });
 
 app.use("/", indexRouter);
+app.use("*", (req, res) => {
+  // Return a 404 page.
+  // res.status(404).send("Not Found");
+
+  res.render("404", { title: "Page not found!", message: "Page not found!" });
+});
 
 // app.get("/", (req, res) => {
 //   res.render("index", { user: req.user, title: "Secret Messenger" });
