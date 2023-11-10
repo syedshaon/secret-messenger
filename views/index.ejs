@@ -1,7 +1,7 @@
 <%- include('header') %>
     
     <div class="container my-6 py-6">
-  <h1 class="title has-text-centered  is-block"> <%= title %></h1>
+  <h1 class="title has-text-centered  is-block"> <%= title %>  </h1>
 
   <% if (messages.length > 0) { %>
     <ul class="message-list is-list is-rounded">
@@ -10,11 +10,12 @@
           <div class="card-header">
             <p class="card-header-title">
               <%= message.title %>
+
             </p>
              <form class="is-flex is-align-content-center" action="/messages/delete" method="post">
               <input class=" is-hidden " type="text" name="mid" id="mid" value=<%=  message.id %>>
               
-              <button type="submit" class=" button has-background-danger px-6 mt-6 mx-auto is-fullwidth is-primary" <%= message.extraClass  %> >Delete</button>
+              <button type="submit" class=" button has-background-danger px-6 mt-6 mx-auto is-fullwidth is-primary" <%  if(user && user.isadmin === "true"){ %> " " <% }else{ %> disabled <%  } %> >Delete</button>
             </form>
           </div>
 
@@ -25,8 +26,18 @@
           </div>
 
           <footer class="card-footer box has-border-top is-primary is-2px py-0">
-            <p class="card-footer-item">Posted by: <%= message.postedBy %></p>
-            <p class="card-footer-item">Posting time: <%= message.postingTime %></p>
+            <p class="card-footer-item"><% if (user) { %>
+                  Posted by: <%= message.postedBy %>
+                <% } else { %>
+                  Only visible to logged in users.
+                <% } %></p>
+            <p class="card-footer-item">
+            
+            <% if (user) { %>
+                  Posting time: <%= message.postingTime %>
+                <% } else { %>
+                  Only visible to logged in users.
+                <% } %></p>
           </footer>
         </li>
       <% } %>

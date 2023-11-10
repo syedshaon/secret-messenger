@@ -62,21 +62,34 @@ const messageController = {
 
       // Format the messages array to include the posted by and posting time
       const formattedMessages = messages.map((message) => {
-        return {
-          id: message._id,
-          title: message.title,
-          text: message.text,
-          postedBy: message.user.firstName, // Assuming the user model has a username property
-          postingTime: message.timestamp.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            hour: "numeric",
-            minute: "numeric",
-            second: "numeric",
-          }),
-          url: message.url,
-        };
+        if (req.isAuthenticated()) {
+          return {
+            extraClass: req.user.isadmin === "true" ? "" : "disabled",
+            id: message._id,
+            title: message.title,
+            text: message.text,
+            postedBy: message.user.firstName, // Assuming the user model has a username property
+            postingTime: message.timestamp.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+              second: "numeric",
+            }),
+            url: message.url,
+          };
+        } else {
+          return {
+            extraClass: "disabled",
+            id: message._id,
+            title: message.title,
+            text: message.text,
+            postedBy: "Visible while logged in", // Assuming the user model has a username property
+            postingTime: "Visible while logged in",
+            url: message.url,
+          };
+        }
       });
 
       res.render("index", { title: "All Messages", messages: formattedMessages });

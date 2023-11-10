@@ -1,7 +1,6 @@
 require("dotenv").config();
 
 const User = require("../models/usersmodel");
-const BlackJWT = require("../models/blackjwt");
 
 const bcrypt = require("bcryptjs");
 const express = require("express");
@@ -15,7 +14,6 @@ const LocalStrategy = require("passport-local").Strategy;
 const jwt = require("jsonwebtoken");
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
-const blacklist = require("express-jwt-blacklist");
 
 const usersController = require("../controllers/userscontroller");
 const messageController = require("../controllers/messagecontroller");
@@ -49,13 +47,13 @@ const authenticateToken = async (req, res, next) => {
 
 async function generateToken(user) {
   const payload = {
-    id: user._id,
+    id: user.id,
     username: user.username,
   };
 
   const secret = process.env.JWT_SECRET;
   const options = {
-    expiresIn: "60s",
+    expiresIn: "1h",
   };
 
   return jwt.sign(payload, secret, options);
@@ -88,8 +86,7 @@ router.post("/signin", async (req, res) => {
 
   // Set the JWT token in a browser cookie
   res.cookie("token", token, {
-    // expires: new Date(Date.now() + 60 * 60 * 1000), // Expires in 1 hour
-    expires: new Date(Date.now() + 60 * 1000), // Expires in 1 min
+    expires: new Date(Date.now() + 60 * 60 * 1000), // Expires in 1 hour
     httpOnly: true,
     secure: true,
   });
@@ -134,77 +131,22 @@ passport.use(
 //   });
 // });
 
-router.get("/log-out", async (req, res, next) => {
-  // Invalidate the user's JWT token.
-  // const token = req.headers.authorization.split(" ")[1];
-  if (req.cookies.token) {
-    const token = req.cookies.token;
-
-    const newblacklistedJWT = new BlackJWT({
-      token: token,
-    });
-    const result = await newblacklistedJWT.save();
-
-    // const user = await verifyToken(token);
-    // if (user) {
-    //   const payload = {
-    //     id: user._id,
-    //     username: user.username,
-    //   };
-
-    //   // Decode the user's JWT token.
-    //   const decodedToken = jwt.decode(token);
-
-    //   // Set the token's expiration time to the past.
-    //   decodedToken.exp = Date.now() / 1000 - 60;
-
-    //   const options = {
-    //     expiresIn: "1s",
-    //   };
-
-    //   const secret = process.env.JWT_SECRET;
-    //   // Re-encode the token.
-    //   const newToken = jwt.sign(payload, secret, options);
-    // }
-
-    // Delete the user's refresh token from the database.
-    // const user = await User.findById(req.user.id);
-    // user.refreshToken = null;
-    // await user.save();
-
-    //
-    //
-    // Clear the user's session cookie.
-    res.clearCookie("token");
-  }
-
-  // Send a response to the client indicating that the user has been successfully logged out.
-  res.redirect("/");
-});
-
 // // Verify a JWT token
-const verifyToken = async (token) => {
-  const isBlacklisted = await BlackJWT.findOne({ token });
-  if (isBlacklisted) {
-    console.log("Blacklisted JWT: " + isBlacklisted.token);
-    const user = false;
-    return user;
-  } else {
-    const secret = process.env.JWT_SECRET;
+const verifyToken = (token) => {
+  const secret = process.env.JWT_SECRET;
 
-    return new Promise((resolve, reject) => {
-      jwt.verify(token, secret, async (err, decodedToken) => {
-        if (err) {
-          // reject(err);
-          const user = false;
-          resolve(user);
-        } else {
-          const user = await User.findOne({ _id: decodedToken.id });
-          resolve(user);
-        }
-      });
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, secret, async (err, decodedToken) => {
+      if (err) {
+        // reject(err);
+        const user = false;
+        resolve(user);
+      } else {
+        const user = await User.findOne({ _id: decodedToken.id });
+        resolve(user);
+      }
     });
-  }
+  });
 };
 
 const isAuthenticated = async (req, res, next) => {
@@ -300,9 +242,9 @@ passport.serializeUser((user, done) => {
   done(null, user._id);
 });
 
-passport.deserializeUser(async (_id, done) => {
+passport.deserializeUser(async (id, done) => {
   try {
-    const user = await User.findById(_id);
+    const user = await User.findById(id);
     done(null, user);
   } catch (err) {
     done(err);

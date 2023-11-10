@@ -1,7 +1,6 @@
 require("dotenv").config();
 
 const usersController = require("./controllers/userscontroller");
-const BlackJWT = require("./models/blackjwt");
 
 const bcrypt = require("bcryptjs");
 const express = require("express");
@@ -11,7 +10,6 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
-const blacklist = require("express-jwt-blacklist");
 
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
@@ -29,7 +27,6 @@ db.on("error", console.error.bind(console, "MongoDB connecion error: "));
 const User = require("./models/usersmodel");
 
 const app = express();
-
 app.use(cookieParser());
 // app.set("views", __dirname);
 app.set("views", path.join(__dirname, "views"));
@@ -48,28 +45,21 @@ app.use(express.urlencoded({ extended: false }));
 // });
 
 // // Verify a JWT token
-const verifyToken = async (token) => {
-  const isBlacklisted = await BlackJWT.findOne({ token });
-  if (isBlacklisted) {
-    console.log("Blacklisted JWT: " + isBlacklisted.token);
-    const user = false;
-    return user;
-  } else {
-    const secret = process.env.JWT_SECRET;
+const verifyToken = (token) => {
+  const secret = process.env.JWT_SECRET;
 
-    return new Promise((resolve, reject) => {
-      jwt.verify(token, secret, async (err, decodedToken) => {
-        if (err) {
-          // reject(err);
-          const user = false;
-          resolve(user);
-        } else {
-          const user = await User.findOne({ _id: decodedToken.id });
-          resolve(user);
-        }
-      });
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, secret, async (err, decodedToken) => {
+      if (err) {
+        // reject(err);
+        const user = false;
+        resolve(user);
+      } else {
+        const user = await User.findOne({ _id: decodedToken.id });
+        resolve(user);
+      }
     });
-  }
+  });
 };
 
 app.use(async (req, res, next) => {
