@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-Liv
-=======
 # Members Only Message Board
 ## Live site can be found here -> https://secret-messenger.onrender.com/
 
