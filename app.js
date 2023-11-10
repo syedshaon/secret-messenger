@@ -7,8 +7,12 @@ const express = require("express");
 const path = require("path");
 const session = require("express-session");
 const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
+const jwt = require("jsonwebtoken");
+const JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
+
 const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
 
 const indexRouter = require("./routes/index");
 
@@ -23,6 +27,7 @@ db.on("error", console.error.bind(console, "MongoDB connecion error: "));
 const User = require("./models/usersmodel");
 
 const app = express();
+app.use(cookieParser());
 // app.set("views", __dirname);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -32,14 +37,52 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
+// Following makes user variable available to "/" route
+
 // app.use((req, res, next) => {
-//   res.locals.currentUser = req.user;
+//   res.locals.user = req.user;
 //   next();
 // });
 
-app.use((req, res, next) => {
-  res.locals.user = req.user;
-  next();
+// // Verify a JWT token
+const verifyToken = (token) => {
+  const secret = process.env.JWT_SECRET;
+
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, secret, async (err, decodedToken) => {
+      if (err) {
+        // reject(err);
+        const user = false;
+        resolve(user);
+      } else {
+        const user = await User.findOne({ _id: decodedToken.id });
+        resolve(user);
+      }
+    });
+  });
+};
+
+app.use(async (req, res, next) => {
+  // Check the user's cookies.
+
+  // const authToken = document.cookie.match(/token=([^;]+)/)[1];
+  // const authToken = req.headers.authorization.split(" ")[1];
+  if (req.cookies.token) {
+    const authToken = req.cookies.token;
+    // Validate the auth token.
+    const user = await verifyToken(authToken);
+    if (user) {
+      req.session.user = user;
+      res.locals.user = user;
+      return next();
+    }
+
+    res.locals.user = req.user;
+    next();
+  } else {
+    res.locals.user = req.user;
+    next();
+  }
 });
 
 app.use("/", indexRouter);
