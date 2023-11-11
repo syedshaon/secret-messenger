@@ -1,6 +1,6 @@
-# Members Only Message Board
+# Members Only Message Board -JWT Authentication
 
-## Live site can be found here -> https://secret-messenger.onrender.com/
+## Live site can be found here -> https://jwt-messenger.onrender.com/
 
 Done for the fulfillment of The Oding Academy Project -> https://www.theodinproject.com/lessons/nodejs-members-only
 
