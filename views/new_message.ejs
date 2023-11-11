@@ -1,6 +1,6 @@
 <%- include('header') %>
 
-<% if(user.membershipStatus === "premium"){ %>
+<% if(user && user.membershipStatus === "premium"){ %>
  <div class="container mt-6 pt-6">
   <form action="/messages/create" method="post"> 
     <h1 class="title has-text-centered  is-block"><%= title %></h1>
@@ -17,7 +17,7 @@
     <button type="submit" class="button px-6 mt-6 mx-auto is-fullwidth is-primary">Create Message</button>
   </form>
 </div>
-  <% }else{ %>
+  <% }else if(user){ %>
     <div class="container mt-6 pt-6">
     <h1 class="title has-text-centered mb-6 pb-6 is-block">You need to join the Premium Members zone to be able to create new messages. Fill the form below to join.</h1>
 
@@ -31,7 +31,14 @@
     <button type="submit" class="button px-6 mt-6 mx-auto is-fullwidth is-primary">Join Premium Group</button>
   </form>
     </div>
-    <% } %>
+    <% }else{ %>
+      <div class="container mt-6 pt-6"> 
+    <h1 class="title has-text-centered  is-block"> <a href="/signin">Please Sign in first to create new message.</a></h1>
+    </div>
+   
+      
+
+      <% } %>
  
 
 

@@ -87,9 +87,11 @@ app.use(async (req, res, next) => {
       return next();
     }
 
+    req.session.user = req.user;
     res.locals.user = req.user;
     next();
   } else {
+    req.session.user = req.user;
     res.locals.user = req.user;
     next();
   }

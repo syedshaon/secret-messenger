@@ -7,6 +7,7 @@
     <% } else {%>
   <form action="/signin" method="post">
     <h1 class="title has-text-centered  is-block"><%= title %></h1>
+    <p class="has-text-centered   has-text-danger">Once you sign in, you will remain signed in for 1 MINUTE. This is the expiration time of JWT and cookie we set. It can be changed.</p>
 
     <div class="field">
       <label class="label" for="username">Email</label>

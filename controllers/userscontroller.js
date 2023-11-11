@@ -14,7 +14,7 @@ const usersController = {
       if (planet !== "earth") {
         throw new Error("Aliens are not allowed to join this chat group.");
       }
-      id = req.user._id;
+      id = req.session.user._id;
 
       // Save the user to the database
       const result = await User.updateOne({ _id: id }, { $set: { membershipStatus: "premium" } });

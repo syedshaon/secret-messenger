@@ -10,13 +10,16 @@ const messageController = {
   message_delete_post: async (req, res, next) => {
     try {
       // Check if the user is authenticated
-      if (!req.isAuthenticated()) {
+      // if (!req.isAuthenticated()) {
+      //   return res.status(401).send({ message: "Unauthorized" });
+      // }
+
+      if (!req.session.user) {
         return res.status(401).send({ message: "Unauthorized" });
       }
-
       // Save the message to the database
       // await Message.deleteOne(_id : mid);
-      if (req.user.isadmin === "true") {
+      if (req.session.user.isadmin === "true") {
         await Message.findByIdAndRemove(req.body.mid);
       } else {
         return res.status(401).send({ message: "Unauthorized" });
@@ -34,7 +37,11 @@ const messageController = {
       const { title, text } = req.body;
 
       // Check if the user is authenticated
-      if (!req.isAuthenticated()) {
+      // if (!req.isAuthenticated()) {
+      //   return res.status(401).send({ message: "Unauthorized" });
+      // }
+
+      if (!req.session.user) {
         return res.status(401).send({ message: "Unauthorized" });
       }
 
@@ -42,7 +49,7 @@ const messageController = {
       const newMessage = new Message({
         title,
         text,
-        user: req.user._id, // Set the user field to the current user's ID
+        user: req.session.user._id, // Set the user field to the current user's ID
       });
 
       // Save the message to the database
